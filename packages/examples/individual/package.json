@@ -1,0 +1,23 @@
+{
+  "name": "zod-config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "tsx .",
+    "type-check": "tsc -p tsconfig.check.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@shellicar/core-config": "workspace:^",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
