@@ -1,15 +1,11 @@
 {
-  "name": "zod-config",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@shellicar/core-config-examples-zod-config",
+  "private": true,
   "main": "index.ts",
   "scripts": {
     "start": "tsx .",
     "type-check": "tsc -p tsconfig.check.json"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@shellicar/core-config": "workspace:^",
     "zod": "^3.24.1"
