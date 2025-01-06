@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "packageManager": "pnpm@9.15.3+sha512.1f79bc245a66eb0b07c5d4d83131240774642caaa86ef7d0434ab47c0d16f66b04e21e0c086eb61e62c77efc4d7f7ec071afad3796af64892fae66509173893a",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "start": "turbo start",
+    "test": "turbo test",
+    "type-check": "turbo type-check",
+    "lint": "biome lint",
+    "format": "biome format",
+    "check": "biome check",
+    "ci": "biome ci --diagnostic-level=error",
+    "ci:fix": "biome check --diagnostic-level=error --fix",
+    "updates": "npm-check-updates --workspaces",
+    "postinstall": "lefthook install"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "lefthook": "^1.10.1",
+    "npm-check-updates": "^17.1.13",
+    "turbo": "^2.3.3"
+  }
+}
