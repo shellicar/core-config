@@ -149,13 +149,13 @@ import { SecureString, SecureURL, SecureConnectionString } from '@shellicar/core
 
 const envSchema = z.object({
   // MongoDB connection string with username/password
-  MONGODB_URL: z.string().url().transform(url => SecureURL.from(new URL(url))),
+  MONGODB_URL: z.string().url().transform((x) => SecureURL.from(new URL(x))),
   
   // API key for external service
-  API_KEY: z.string().min(1).transform(SecureString.from),
+  API_KEY: z.string().min(1).transform((x) => SecureString.from(x)),
   
   // SQL Server connection string
-  SQL_CONNECTION: z.string().transform(SecureConnectionString.from),
+  SQL_CONNECTION: z.string().transform((x) => SecureConnectionString.from(x)),
 });
 
 // Parse environment variables
@@ -163,13 +163,13 @@ const config = envSchema.parse(process.env);
 
 // Values are now strongly typed and secured
 console.log(config.MONGODB_URL.toString());
-// https://myuser@mongodb.example.com/
+// https://myuser:sha256%3A...@mongodb.example.com/
 
 console.log(config.API_KEY.toString());
-// sha256:71d4ec024886c1c8e4707fb02b46fd568df44e77dd5055cadc3451747f0f2716
+// sha256:...
 
 console.log(config.SQL_CONNECTION.toString());
-// Server=myserver;Database=mydb;User Id=admin;Password=sha256:71d4ec...
+// Server=myserver;Database=mydb;User Id=admin;Password=sha256:...
 ```
 
 All sensitive values are automatically hashed in logs and serialisation, while still being accessible via the `secretValue` property when needed.
