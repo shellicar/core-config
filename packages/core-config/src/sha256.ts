@@ -1,14 +1,13 @@
-import { type Hash, type Hmac, createHash, createHmac } from 'node:crypto';
+import { createHash, createHmac } from 'node:crypto';
 
 const getHash = (secret?: string) => {
   if (secret === undefined) {
-    return createHash('sha256');
+    return (x: string) => `sha256:${createHash('sha256').update(x).digest('hex')}`;
   }
-  return createHmac('sha256', secret);
+  return (x: string) => `hs256:${createHmac('sha256', secret).update(x).digest('hex')}`;
 };
 
 export const sha256 = (input: string, secret?: string) => {
   const hash = getHash(secret);
-  const digest = hash.update(input).digest('hex');
-  return `sha256:${digest}`;
+  return hash(input);
 };

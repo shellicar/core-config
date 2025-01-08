@@ -44,12 +44,12 @@ describe('SecureString', () => {
   });
 
   it('can use secret key', () => {
-    const secret = 'hello';
-    const expected = 'sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824';
+    const secret = 'password';
+    const expected = 'hs256:7055faebf30a41341bb8d043f6a3a6a18f051f6b30ce6c7b16f7276fe4fdaae7';
 
     const secureString = SecureString.from(secret, 'hello');
     const actual = secureString.toString();
 
-    expect(actual).not.toBe(expected);
+    expect(actual).toBe(expected);
   });
 });
