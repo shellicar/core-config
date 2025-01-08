@@ -24,21 +24,71 @@ importers:
         specifier: ^2.3.3
         version: 2.3.3
 
-  examples/individual:
+  examples/cjs:
     dependencies:
+      '@shellicar/core-config':
+        specifier: workspace:^
+        version: link:../../packages/core-config
       zod:
         specifier: ^3.24.1
         version: 3.24.1
     devDependencies:
-      '@shellicar/core-config':
-        specifier: workspace:^
-        version: link:../../packages/core-config
       '@tsconfig/node20':
         specifier: ^20.1.4
         version: 20.1.4
       '@types/node':
         specifier: ^22.10.5
         version: 22.10.5
+      tsup:
+        specifier: ^8.3.5
+        version: 8.3.5(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)
+      tsx:
+        specifier: ^4.19.2
+        version: 4.19.2
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+
+  examples/esm:
+    dependencies:
+      '@shellicar/core-config':
+        specifier: workspace:^
+        version: link:../../packages/core-config
+      zod:
+        specifier: ^3.24.1
+        version: 3.24.1
+    devDependencies:
+      '@tsconfig/node20':
+        specifier: ^20.1.4
+        version: 20.1.4
+      '@types/node':
+        specifier: ^22.10.5
+        version: 22.10.5
+      tsup:
+        specifier: ^8.3.5
+        version: 8.3.5(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)
+      tsx:
+        specifier: ^4.19.2
+        version: 4.19.2
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+
+  examples/readme:
+    dependencies:
+      '@shellicar/core-config':
+        specifier: workspace:^
+        version: link:../../packages/core-config
+    devDependencies:
+      '@tsconfig/node20':
+        specifier: ^20.1.4
+        version: 20.1.4
+      '@types/node':
+        specifier: ^22.10.5
+        version: 22.10.5
+      tsup:
+        specifier: ^8.3.5
+        version: 8.3.5(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)
       tsx:
         specifier: ^4.19.2
         version: 4.19.2
@@ -61,6 +111,9 @@ importers:
       '@types/node':
         specifier: ^22.10.5
         version: 22.10.5
+      tsup:
+        specifier: ^8.3.5
+        version: 8.3.5(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)
       tsx:
         specifier: ^4.19.2
         version: 4.19.2

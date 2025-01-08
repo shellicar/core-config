@@ -1,6 +1,33 @@
 # @shellicar/core-config
 
-A library for securely handling sensitive configuration values like connection strings, URLs, and secrets.
+> A library for securely handling sensitive configuration values like connection strings, URLs, and secrets.
+
+[![npm package](https://img.shields.io/npm/v/@shellicar/core-config.svg)](https://npmjs.com/package/@shellicar/core-config)
+[![build status](https://github.com/shellicar/core-config/actions/workflows/node.js.yml/badge.svg)](https://github.com/shellicar/core-config/actions/workflows/node.js.yml)
+
+## Features
+
+- 🔐 **SecureString** - Safely handle sensitive string values with automatic hashing for logs and serialization
+- 🔗 **SecureConnectionString** - Parse and protect connection strings with configurable secret key detection
+- 🌐 **SecureURL** - Handle URLs while protecting sensitive components like passwords
+
+## Installation & Quick Start
+
+```sh
+npm i --save @shellicar/core-config
+```
+
+```sh
+pnpm add @shellicar/core-config
+```
+
+```ts
+import { SecureString, SecureConnectionString, SecureURL } from '@shellicar/core-config';
+
+console.log(SecureString.from('myPassword123'));
+console.log(SecureConnectionString.from('Server=myserver.uri;Password=myPassword123'));
+console.log(SecureURL.from(new URL('http://myuser:myPassword123@myserver.uri')));
+```
 
 <!-- BEGIN_ECOSYSTEM -->
 
@@ -28,21 +55,19 @@ A library for securely handling sensitive configuration values like connection s
 
 <!-- END_ECOSYSTEM -->
 
-## Features
+## Motivation
 
-- 🔐 **SecureString** - Safely handle sensitive string values with automatic hashing for logs and serialization
-- 🔗 **SecureConnectionString** - Parse and protect connection strings with configurable secret key detection
-- 🌐 **SecureURL** - Handle URLs while protecting sensitive components like passwords
+To make storing and comparing configuration including secrets easy and simple.
 
-## Usage
+You can easily output or display your configuration, even secret/secure values, without having to manually hash them or extract them.
 
-```sh
-pnpm i --save @shellicar/core-config
-```
+## Feature Examples
 
-### SecureString
+Three main classes, `SecureString`, `SecureConnectionString`, and `SecureURL`.
 
-Securely handle sensitive string values:
+See [readme examples](./examples/readme/src) for example source code.
+
+- Handle strings.
 
 ```typescript
 import { SecureString } from '@shellicar/core-config';
@@ -56,9 +81,7 @@ console.log(JSON.stringify({ secret }));
 // {"secret":"sha256:71d4ec024886c1c8e4707fb02b46fd568df44e77dd5055cadc3451747f0f2716"}
 ```
 
-### SecureConnectionString
-
-Handle connection strings with automatic secret protection:
+- Handle connection strings (`Key=Value[;Key=Value...]`).
 
 ```typescript
 import { SecureConnectionString } from '@shellicar/core-config';
@@ -75,9 +98,7 @@ console.log(SecureConnectionString.from('Server=myserver;SuperSecretKey=myPasswo
 // }
 ```
 
-### SecureURL
-
-Safely handle URLs containing sensitive information:
+- Handle URLs with passwords.information:
 
 ```typescript
 import { SecureURL } from '@shellicar/core-config';
@@ -94,6 +115,20 @@ console.log(secureUrl);
 //   password: 'sha256:71d4ec024886c1c8e4707fb02b46fd568df44e77dd5055cadc3451747f0f2716',
 //   searchParams: { key: 'value' }
 // }
+```
+
+- Use HMAC.
+
+```ts
+import { SecureString } from '@shellicar/core-config';
+
+const secret = SecureString.from('myPassword123', 'mySecret');
+
+console.log(secret.toString()); 
+// sha256:71d4ec024886c1c8e4707fb02b46fd568df44e77dd5055cadc3451747f0f2716
+
+console.log(JSON.stringify({ secret }));
+// {"secret":"sha256:71d4ec024886c1c8e4707fb02b46fd568df44e77dd5055cadc3451747f0f2716"}
 ```
 
 ### Default Secure Keys

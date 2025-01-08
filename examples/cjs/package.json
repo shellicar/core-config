@@ -1,7 +1,7 @@
 {
-  "name": "@shellicar/core-config-examples-zod-config",
+  "name": "@shellicar/core-config-examples-cjs",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsup-node",

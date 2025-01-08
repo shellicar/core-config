@@ -59,7 +59,7 @@ describe('SecureConnectionString', () => {
     const connectionString = 'A=B;C=D;MySecretKey=F';
     const expected = 'A=B;C=D;MySecretKey=sha256:f67ab10ad4e4c53121b6a5fe4da9c10ddee905b978d3788d2723d7bfacbe28a9';
 
-    const secureConnectionString = SecureConnectionString.from(connectionString, 'MySecretKey');
+    const secureConnectionString = SecureConnectionString.from(connectionString, ['MySecretKey']);
 
     const actual = secureConnectionString.toString();
 
@@ -75,5 +75,14 @@ describe('SecureConnectionString', () => {
     const actual = secureConnectionString.toString();
 
     expect(actual).toBe(expected);
+  });
+
+  it('can use secret key', () => {
+    const connectionString = 'A=B;C=D;SharedAccessKey=F';
+    const notExpected = 'sha256:f67ab10ad4e4c53121b6a5fe4da9c10ddee905b978d3788d2723d7bfacbe28a9';
+    const secureConnectionString = SecureConnectionString.from(connectionString, undefined, 'hello');
+
+    const actual = secureConnectionString.toString();
+    expect(actual).not.toBe(notExpected);
   });
 });
