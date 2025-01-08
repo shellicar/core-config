@@ -38,7 +38,7 @@ export class SecureString extends BaseObject {
   }
   override [util.inspect.custom](depth: number, options: InspectOptions, inspect: InspectFunction): string {
     if (depth < 0) {
-      return '[SecureURL]';
+      return '[SecureString]';
     }
     const newOptions = Object.assign({}, options, {
       depth: options.depth == null ? null : options.depth - 1,
