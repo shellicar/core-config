@@ -78,11 +78,11 @@ describe('SecureConnectionString', () => {
   });
 
   it('can use secret key', () => {
-    const connectionString = 'A=B;C=D;SharedAccessKey=F';
-    const notExpected = 'sha256:f67ab10ad4e4c53121b6a5fe4da9c10ddee905b978d3788d2723d7bfacbe28a9';
+    const connectionString = 'A=B;C=D;SharedAccessKey=password';
+    const expected = 'A=B;C=D;SharedAccessKey=hs256:7055faebf30a41341bb8d043f6a3a6a18f051f6b30ce6c7b16f7276fe4fdaae7';
     const secureConnectionString = SecureConnectionString.from(connectionString, undefined, 'hello');
 
     const actual = secureConnectionString.toString();
-    expect(actual).not.toBe(notExpected);
+    expect(actual).toBe(expected);
   });
 });

@@ -1,5 +1,5 @@
 import util, { type InspectOptions } from 'node:util';
-import { sha256 } from './sha256';
+import { hash } from './hash';
 import { BaseObject, type InspectFunction } from './types';
 
 export class SecureString extends BaseObject {
@@ -13,7 +13,7 @@ export class SecureString extends BaseObject {
   private constructor(value: string, secret?: string) {
     super();
     this.#value = value;
-    this.#hash = sha256(value, secret);
+    this.#hash = hash(value, secret);
   }
 
   static factory(secret: string | undefined): (value: string) => SecureString {
@@ -38,7 +38,7 @@ export class SecureString extends BaseObject {
   }
   override [util.inspect.custom](depth: number, options: InspectOptions, inspect: InspectFunction): string {
     if (depth < 0) {
-      return '[SecureURL]';
+      return '[SecureString]';
     }
     const newOptions = Object.assign({}, options, {
       depth: options.depth == null ? null : options.depth - 1,

@@ -94,14 +94,14 @@ describe('SecureURL', () => {
 
   it('can use secret key', () => {
     const url = new URL('https://user:password@localhost:8080/');
-    const expected = 'https://user:sha256%3A5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8@localhost:8080/';
+    const expected = 'https://user:hs256%3A7055faebf30a41341bb8d043f6a3a6a18f051f6b30ce6c7b16f7276fe4fdaae7@localhost:8080/';
 
     const secureUrl = SecureURL.from(url, 'hello');
 
     const actual = secureUrl.toString();
     console.log('actual', actual);
 
-    expect(actual).not.toBe(expected);
+    expect(actual).toBe(expected);
   });
 
   it('can use secret key with JSON', () => {
@@ -109,13 +109,13 @@ describe('SecureURL', () => {
 
     const expected = JSON.stringify({
       href: 'https://user@localhost:8080/',
-      password: 'sha256:5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
+      password: 'hs256:7055faebf30a41341bb8d043f6a3a6a18f051f6b30ce6c7b16f7276fe4fdaae7',
     });
 
     const secureUrl = SecureURL.from(url, 'hello');
 
     const actual = JSON.stringify(secureUrl);
 
-    expect(actual).not.toBe(expected);
+    expect(actual).toBe(expected);
   });
 });
