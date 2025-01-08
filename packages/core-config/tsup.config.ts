@@ -1,16 +1,18 @@
-import type { Options } from 'tsup';
+import { defineConfig } from 'tsup';
 
-export default (<Options>{
-  entry: ['src/**/*.ts'],
-  clean: true,
-  bundle: true,
-  format: ['cjs', 'esm'],
-  tsconfig: 'tsconfig',
-  dts: true,
-  treeshake: true,
-  outDir: 'dist',
-  minify: 'terser',
-  sourcemap: true,
-  keepNames: true,
+export default defineConfig((config) => ({
+  entry: ['src/index.ts'],
   splitting: true,
-});
+  sourcemap: true,
+  treeshake: true,
+  dts: true,
+  clean: true,
+  minify: config.watch ? false : 'terser',
+  keepNames: true,
+  bundle: true,
+  tsconfig: 'tsconfig.json',
+  inject: [],
+  target: 'node20',
+  format: ['esm', 'cjs'],
+  outDir: 'dist',
+}));
