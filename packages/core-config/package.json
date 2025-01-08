@@ -30,7 +30,7 @@
   "files": ["dist", "*.md"],
   "scripts": {
     "build": "tsup-node",
-    "dev": "tsup-node --watch src",
+    "dev": "tsup-node --watch",
     "test": "vitest run",
     "type-check": "tsc -p tsconfig.check.json"
   },
