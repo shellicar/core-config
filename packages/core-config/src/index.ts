@@ -4,4 +4,6 @@ import { SecureURL } from './SecureURL';
 import { createFactory } from './createFactory';
 import { defaultSecureKeys } from './defaults';
 
-export { SecureConnectionString, SecureString, SecureURL, createFactory, defaultSecureKeys };
+export { SecureConnectionString, SecureString, SecureURL };
+export { createFactory };
+export { defaultSecureKeys };

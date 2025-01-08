@@ -1,7 +1,7 @@
 import util, { type InspectOptions } from 'node:util';
 import { SecureString } from './SecureString';
 import { defaultSecureKeys } from './defaults';
-import { BaseObject, type InspectFunction } from './types';
+import { BaseObject, type InspectFunction, type SecureKeys } from './types';
 
 export class SecureConnectionString extends BaseObject {
   readonly #value: string;
@@ -11,7 +11,7 @@ export class SecureConnectionString extends BaseObject {
     return this.#value;
   }
 
-  private constructor(value: string, secretKeys: readonly string[], secret: string | undefined) {
+  private constructor(value: string, secretKeys: SecureKeys, secret: string | undefined) {
     super();
     this.#value = value;
     this.#data = this.parseConnectionString(
@@ -21,7 +21,7 @@ export class SecureConnectionString extends BaseObject {
     );
   }
 
-  private parseConnectionString(value: string, secretKeys: readonly string[], secret: string | undefined): [string, string | SecureString][] {
+  private parseConnectionString(value: string, secretKeys: SecureKeys, secret: string | undefined): [string, string | SecureString][] {
     return value
       .split(';')
       .filter(Boolean)
@@ -33,11 +33,11 @@ export class SecureConnectionString extends BaseObject {
       });
   }
 
-  static factory(secret: string | undefined, secretKeys?: readonly string[]): (value: string) => SecureConnectionString {
+  static factory(secret: string | undefined, secretKeys?: SecureKeys): (value: string) => SecureConnectionString {
     return (value: string) => SecureConnectionString.from(value, secretKeys, secret);
   }
 
-  public static from<T extends string | null | undefined>(value: T, secretKeys?: readonly string[], secret?: string): T extends string ? SecureConnectionString : T {
+  public static from<T extends string | null | undefined>(value: T, secretKeys?: SecureKeys, secret?: string): T extends string ? SecureConnectionString : T {
     if (value === null) {
       return null as T extends string ? SecureConnectionString : T;
     }

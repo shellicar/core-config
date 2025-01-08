@@ -2,6 +2,12 @@ import util, { type InspectOptions } from 'node:util';
 import { SecureString } from './SecureString';
 import { BaseObject, type InspectFunction } from './types';
 
+type UrlObject = {
+  href: string;
+  password?: string;
+  searchParams?: Record<string, string>;
+};
+
 /**
  * SecureURL obfuscates the password from the URL.
  */
@@ -34,21 +40,36 @@ export class SecureURL extends BaseObject {
   }
 
   override toString(): string {
-    return this.toURL().href;
-  }
-
-  toURL(): URL {
     const newUrl = new URL(this.#value.href);
     if (this.#password !== null) {
       newUrl.password = this.#password.toString();
     }
-    return newUrl;
+    return newUrl.href;
   }
 
-  override toJSON(): string {
-    return JSON.stringify(this.toURL());
-  }
+  override toJSON(): UrlObject {
+    const newUrl = new URL(this.#value.href);
+    newUrl.password = '';
 
+    const searchParams = new URLSearchParams(newUrl.searchParams);
+    newUrl.search = '';
+
+    let password: string | undefined;
+    if (this.#password !== null) {
+      password = this.#password.toString();
+    }
+
+    const result: UrlObject = {
+      href: newUrl.href,
+    };
+    if (password !== undefined) {
+      result.password = password;
+    }
+    if (searchParams.size > 0) {
+      result.searchParams = Object.fromEntries(searchParams);
+    }
+    return result;
+  }
   override [util.inspect.custom](depth: number, options: InspectOptions, inspect: InspectFunction): string {
     if (depth < 0) {
       return '[SecureURL]';
@@ -56,6 +77,6 @@ export class SecureURL extends BaseObject {
     const newOptions = Object.assign({}, options, {
       depth: options.depth == null ? null : options.depth - 1,
     });
-    return inspect(this.toURL(), newOptions);
+    return inspect(this.toJSON(), newOptions);
   }
 }

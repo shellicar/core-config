@@ -106,6 +106,7 @@ describe('SecureURL', () => {
 
   it('can use secret key with JSON', () => {
     const url = new URL('https://user:password@localhost:8080/');
+
     const expected = JSON.stringify({
       href: 'https://user@localhost:8080/',
       password: 'sha256:5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',

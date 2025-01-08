@@ -16,3 +16,5 @@ export type SecureFactory = {
   connectionString: (value: string, secretKeys?: readonly string[]) => SecureConnectionString;
   url: (value: URL) => SecureURL;
 };
+
+export type SecureKeys = readonly string[];

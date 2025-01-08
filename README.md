@@ -7,7 +7,7 @@
 
 ## Features
 
-- 🔐 **SecureString** - Safely handle sensitive string values with automatic hashing for logs and serialization
+- 🔐 **SecureString** - Safely handle sensitive string values with automatic hashing for logs and serialisation
 - 🔗 **SecureConnectionString** - Parse and protect connection strings with configurable secret key detection
 - 🌐 **SecureURL** - Handle URLs while protecting sensitive components like passwords
 
@@ -137,7 +137,7 @@ For a list of default secure keys for connection strings, see [defaults.ts](./pa
 
 ### Secure Output
 
-All secure types implement proper toString(), toJSON(), and inspect() methods to ensure sensitive data is never accidentally exposed through logs or serialization.
+All secure types implement proper toString(), toJSON(), and inspect() methods to ensure sensitive data is never accidentally exposed through logs or serialisation.
 
 ### Real World Example
 
@@ -172,4 +172,4 @@ console.log(config.SQL_CONNECTION.toString());
 // Server=myserver;Database=mydb;User Id=admin;Password=sha256:71d4ec...
 ```
 
-All sensitive values are automatically hashed in logs and serialization, while still being accessible via the `secretValue` property when needed.
+All sensitive values are automatically hashed in logs and serialisation, while still being accessible via the `secretValue` property when needed.
