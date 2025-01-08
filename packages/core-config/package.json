@@ -1,7 +1,7 @@
 {
   "name": "@shellicar/core-config",
   "type": "module",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A library for securely handling sensitive configuration values like connection strings, URLs, and secrets.",
   "license": "MIT",
   "homepage": "https://github.com/shellicar/core-config#readme",
@@ -29,8 +29,8 @@
   },
   "files": ["dist", "*.md"],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch src",
+    "build": "tsup-node",
+    "dev": "tsup-node --watch src",
     "test": "vitest run",
     "type-check": "tsc -p tsconfig.check.json"
   },

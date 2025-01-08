@@ -1,9 +1,11 @@
 {
   "name": "@shellicar/core-config-examples-zod-config",
   "private": true,
-  "main": "index.ts",
+  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "tsx .",
+    "build": "tsup-node",
+    "start": "node .",
     "type-check": "tsc -p tsconfig.check.json"
   },
   "dependencies": {
@@ -13,6 +15,7 @@
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
     "@types/node": "^22.10.5",
+    "tsup": "^8.3.5",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }

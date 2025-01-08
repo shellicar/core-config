@@ -1,34 +1,48 @@
-import { inspect } from 'node:util';
+import util, { type InspectOptions } from 'node:util';
 import { sha256 } from './sha256';
-import { BaseObject } from './types';
+import { BaseObject, type InspectFunction } from './types';
 
 export class SecureString extends BaseObject {
   readonly #value: string;
+  readonly #hash: string;
 
   public get secretValue(): string {
     return this.#value;
   }
 
-  private constructor(value: string) {
+  private constructor(value: string, secret?: string) {
     super();
     this.#value = value;
+    this.#hash = sha256(value, secret);
   }
+
+  static factory(secret: string | undefined): (value: string) => SecureString {
+    return (value: string) => SecureString.from(value, secret);
+  }
+
+  public static from<T extends string | null | undefined>(value: T, secret?: string): T extends string ? SecureString : T {
+    if (value === null) {
+      return null as T extends string ? SecureString : T;
+    }
+    if (value === undefined) {
+      return undefined as T extends string ? SecureString : T;
+    }
+    return new SecureString(value, secret) as T extends string ? SecureString : T;
+  }
+
   public override toString() {
-    return sha256(this.#value);
+    return this.#hash;
   }
   public override toJSON() {
     return this.toString();
   }
-  public override [inspect.custom]() {
-    return inspect(this.toString());
-  }
-
-  public static from(value: string): SecureString;
-  public static from(value: null | undefined): null;
-  public static from(value: string | null | undefined): SecureString | null {
-    if (value == null) {
-      return null;
+  override [util.inspect.custom](depth: number, options: InspectOptions, inspect: InspectFunction): string {
+    if (depth < 0) {
+      return '[SecureURL]';
     }
-    return new SecureString(value);
+    const newOptions = Object.assign({}, options, {
+      depth: options.depth == null ? null : options.depth - 1,
+    });
+    return inspect(this.toJSON(), newOptions);
   }
 }

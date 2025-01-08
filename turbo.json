@@ -5,7 +5,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["**/*.ts", "**/*.graphql"],
+      "inputs": ["tsconfig.json", "**/*.ts"],
       "outputs": ["dist"]
     },
     "dev": {
@@ -13,7 +13,9 @@
       "persistent": true
     },
     "start": {
-      "cache": false
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true
     },
     "test": {
       "dependsOn": ["^build"],
@@ -21,6 +23,7 @@
     },
     "type-check": {
       "dependsOn": ["^build"],
+      "inputs": ["tsconfig.check.json"],
       "outputs": ["**/node_modules/.cache/tsbuildinfo.json"]
     }
   }

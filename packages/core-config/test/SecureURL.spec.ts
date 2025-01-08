@@ -91,4 +91,31 @@ describe('SecureURL', () => {
 
     expect(actual.href).toBe(expected.href);
   });
+
+  it('can use secret key', () => {
+    const url = new URL('https://user:password@localhost:8080/');
+    const expected = 'https://user:sha256%3A5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8@localhost:8080/';
+
+    const secureUrl = SecureURL.from(url, 'hello');
+
+    const actual = secureUrl.toString();
+    console.log('actual', actual);
+
+    expect(actual).not.toBe(expected);
+  });
+
+  it('can use secret key with JSON', () => {
+    const url = new URL('https://user:password@localhost:8080/');
+
+    const expected = JSON.stringify({
+      href: 'https://user@localhost:8080/',
+      password: 'sha256:5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
+    });
+
+    const secureUrl = SecureURL.from(url, 'hello');
+
+    const actual = JSON.stringify(secureUrl);
+
+    expect(actual).not.toBe(expected);
+  });
 });
