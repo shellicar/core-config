@@ -1,10 +1,12 @@
 {
   "name": "@shellicar/core-config",
-  "type": "module",
+  "private": false,
   "version": "1.0.1",
-  "description": "A library for securely handling sensitive configuration values like connection strings, URLs, and secrets.",
+  "type": "module",
   "license": "MIT",
-  "homepage": "https://github.com/shellicar/core-config#readme",
+  "author": "Stephen Hellicar",
+  "description": "A library for securely handling sensitive configuration values like connection strings, URLs, and secrets.",
+  "keywords": ["secure", "connection", "string", "connection string", "config", "secret", "URL"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shellicar/core-config.git"
@@ -12,7 +14,10 @@
   "bugs": {
     "url": "https://github.com/shellicar/core-config/issues"
   },
-  "keywords": ["secure", "connection", "string", "connection string", "config", "secret", "URL"],
+  "homepage": "https://github.com/shellicar/core-config#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -33,9 +38,6 @@
     "dev": "tsup-node --watch",
     "test": "vitest run",
     "type-check": "tsc -p tsconfig.check.json"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
