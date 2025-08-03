@@ -1,7 +1,8 @@
-import { SecureURL } from '@shellicar/core-config';
+import { createFactory } from '@shellicar/core-config';
 
+const factory = createFactory();
 const url = new URL('https://user:myPassword123@example.com?key=value');
-const secureUrl = SecureURL.from(url);
+const secureUrl = factory.url(url);
 
 console.log(secureUrl.toString());
 // https://user@example.com/?key=value

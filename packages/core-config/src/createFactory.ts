@@ -1,12 +1,25 @@
+import { EncryptedValue } from './EncryptedValue';
 import { SecureConnectionString } from './SecureConnectionString';
 import { SecureString } from './SecureString';
 import { SecureURL } from './SecureURL';
-import type { SecureFactory } from './types';
+import { defaultSecureKeys } from './defaults';
+import type { ISecureFactory } from './interfaces';
+import type { IEncryptionProvider, SecureConfig } from './types';
 
-export const createFactory = (secret?: string): SecureFactory => {
+export const defaultEncryptionProvider: IEncryptionProvider = {
+  encrypt: (value: string) => new EncryptedValue(value),
+};
+
+export const createFactory = (options?: Partial<SecureConfig>): ISecureFactory => {
+  const config: SecureConfig = {
+    secret: options?.secret ?? null,
+    encryptionProvider: options?.encryptionProvider ?? defaultEncryptionProvider,
+    secretKeys: options?.secretKeys ?? defaultSecureKeys,
+  };
+
   return {
-    string: SecureString.factory(secret),
-    connectionString: SecureConnectionString.factory(secret),
-    url: SecureURL.factory(secret),
+    string: SecureString.factory(config),
+    connectionString: SecureConnectionString.factory(config),
+    url: SecureURL.factory(config),
   };
 };

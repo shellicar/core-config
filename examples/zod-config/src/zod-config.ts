@@ -1,5 +1,7 @@
-import { SecureConnectionString, SecureString, SecureURL } from '@shellicar/core-config';
+import { createFactory } from '@shellicar/core-config';
 import { z } from 'zod';
+
+const factory = createFactory();
 
 const env = {
   MONGODB_URL: 'mongodb://user:myPassword123@localhost:27017/?authSource=admin',
@@ -12,16 +14,16 @@ const envSchema = z.object({
   MONGODB_URL: z
     .string()
     .url()
-    .transform((x) => SecureURL.from(new URL(x))),
+    .transform((x) => factory.url(new URL(x))),
 
   // API key for external service
   API_KEY: z
     .string()
     .min(1)
-    .transform((x) => SecureString.from(x)),
+    .transform((x) => factory.string(x)),
 
   // SQL Server connection string
-  SQL_CONNECTION: z.string().transform((x) => SecureConnectionString.from(x)),
+  SQL_CONNECTION: z.string().transform((x) => factory.connectionString(x)),
 });
 
 // Parse environment variables

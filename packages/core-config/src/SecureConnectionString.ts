@@ -1,50 +1,50 @@
 import util, { type InspectOptions } from 'node:util';
 import { SecureString } from './SecureString';
-import { defaultSecureKeys } from './defaults';
-import { BaseObject, type InspectFunction, type SecureKeys } from './types';
+import { ISecureConnectionString } from './interfaces';
+import type { IEncryptedValue, InspectFunction, SecureConfig, SecureKeys } from './types';
 
-export class SecureConnectionString extends BaseObject {
-  readonly #value: string;
+export class SecureConnectionString extends ISecureConnectionString {
+  readonly #encryptedValue: IEncryptedValue;
   readonly #data: [string, string | SecureString][];
 
   public get secretValue(): string {
-    return this.#value;
+    return this.#encryptedValue.getValue();
   }
 
-  private constructor(value: string, secretKeys: SecureKeys, secret: string | undefined) {
+  private constructor(value: string, config: SecureConfig) {
     super();
-    this.#value = value;
+    this.#encryptedValue = config.encryptionProvider.encrypt(value);
     this.#data = this.parseConnectionString(
       value,
-      secretKeys.map((x) => x.toLocaleLowerCase()),
-      secret,
+      config.secretKeys.map((x) => x.toLocaleLowerCase()),
+      config,
     );
   }
 
-  private parseConnectionString(value: string, secretKeys: SecureKeys, secret: string | undefined): [string, string | SecureString][] {
+  private parseConnectionString(value: string, secretKeys: SecureKeys, config: SecureConfig): [string, string | SecureString][] {
     return value
       .split(';')
       .filter(Boolean)
       .map((pair) => {
         const [key, value] = pair.split('=');
         const v = value ?? '';
-        const val = secretKeys.includes(key.toLocaleLowerCase()) ? SecureString.from(v, secret) : v;
+        const val = secretKeys.includes(key.toLocaleLowerCase()) ? SecureString.from(v, config) : v;
         return [key, val];
       });
   }
 
-  static factory(secret: string | undefined, secretKeys?: SecureKeys): (value: string) => SecureConnectionString {
-    return (value: string) => SecureConnectionString.from(value, secretKeys, secret);
+  static factory(config: SecureConfig): (value: string) => SecureConnectionString {
+    return (value: string) => SecureConnectionString.from(value, config);
   }
 
-  public static from<T extends string | null | undefined>(value: T, secretKeys?: SecureKeys, secret?: string): T extends string ? SecureConnectionString : T {
+  public static from<T extends string | null | undefined>(value: T, config: SecureConfig): T extends string ? SecureConnectionString : T {
     if (value === null) {
       return null as T extends string ? SecureConnectionString : T;
     }
     if (value === undefined) {
       return undefined as T extends string ? SecureConnectionString : T;
     }
-    return new SecureConnectionString(value, secretKeys ?? defaultSecureKeys, secret) as T extends string ? SecureConnectionString : T;
+    return new SecureConnectionString(value, config) as T extends string ? SecureConnectionString : T;
   }
 
   public override toString(): string {

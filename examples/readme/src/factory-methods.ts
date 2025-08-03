@@ -2,7 +2,7 @@ import { equal } from 'node:assert';
 import { createFactory } from '@shellicar/core-config';
 import { secretHmac, secretKey, secretString } from './constants';
 
-const factory = createFactory(secretKey);
+const factory = createFactory({ secret: secretKey });
 
 const secret = factory.string(secretString);
 equal(`${secret}`, secretHmac);

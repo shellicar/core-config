@@ -1,7 +1,8 @@
 import { equal } from 'node:assert/strict';
-import { SecureURL } from '@shellicar/core-config';
+import { createFactory } from '@shellicar/core-config';
 import { secretSha, secretString } from './constants';
 
+const factory = createFactory();
 const url = new URL(`https://:${secretString}@example.uri`);
-const s = SecureURL.from(url);
+const s = factory.url(url);
 equal(`${s}`, `https://:${encodeURIComponent(secretSha)}@example.uri/`);

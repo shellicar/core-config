@@ -16,11 +16,11 @@ const algorithms = {
   }),
 } as const;
 
-const getAlgorithm = (secret?: string): HashAlgorithm => {
-  return secret === undefined ? algorithms.sha256() : algorithms.hs256(secret);
+const getAlgorithm = (secret: string | null): HashAlgorithm => {
+  return secret == null ? algorithms.sha256() : algorithms.hs256(secret);
 };
 
-export const hash = (input: string, secret?: string) => {
+export const hash = (input: string, secret: string | null) => {
   const alg = getAlgorithm(secret);
   const hash = alg.hash(input);
   return `${alg.prefix}:${hash}`;
