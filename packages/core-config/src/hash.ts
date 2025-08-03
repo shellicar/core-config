@@ -17,7 +17,7 @@ const algorithms = {
 } as const;
 
 const getAlgorithm = (secret: string | null): HashAlgorithm => {
-  return secret === null ? algorithms.sha256() : algorithms.hs256(secret);
+  return secret == null ? algorithms.sha256() : algorithms.hs256(secret);
 };
 
 export const hash = (input: string, secret: string | null) => {
