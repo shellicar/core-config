@@ -1,18 +1,20 @@
 import util, { type InspectOptions } from 'node:util';
+import { EncryptedValue } from './EncryptedValue';
 import { hash } from './hash';
-import { BaseObject, type InspectFunction } from './types';
+import { ISecureString } from './interfaces';
+import type { InspectFunction } from './types';
 
-export class SecureString extends BaseObject {
-  readonly #value: string;
+export class SecureString extends ISecureString {
+  readonly #encryptedValue: EncryptedValue;
   readonly #hash: string;
 
   public get secretValue(): string {
-    return this.#value;
+    return this.#encryptedValue.getValue();
   }
 
   private constructor(value: string, secret?: string) {
     super();
-    this.#value = value;
+    this.#encryptedValue = new EncryptedValue(value);
     this.#hash = hash(value, secret);
   }
 

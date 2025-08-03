@@ -1,19 +1,21 @@
 import util, { type InspectOptions } from 'node:util';
+import { EncryptedValue } from './EncryptedValue';
 import { SecureString } from './SecureString';
 import { defaultSecureKeys } from './defaults';
-import { BaseObject, type InspectFunction, type SecureKeys } from './types';
+import { ISecureConnectionString } from './interfaces';
+import type { InspectFunction, SecureKeys } from './types';
 
-export class SecureConnectionString extends BaseObject {
-  readonly #value: string;
+export class SecureConnectionString extends ISecureConnectionString {
+  readonly #encryptedValue: EncryptedValue;
   readonly #data: [string, string | SecureString][];
 
   public get secretValue(): string {
-    return this.#value;
+    return this.#encryptedValue.getValue();
   }
 
   private constructor(value: string, secretKeys: SecureKeys, secret: string | undefined) {
     super();
-    this.#value = value;
+    this.#encryptedValue = new EncryptedValue(value);
     this.#data = this.parseConnectionString(
       value,
       secretKeys.map((x) => x.toLocaleLowerCase()),

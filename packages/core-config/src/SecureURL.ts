@@ -1,6 +1,8 @@
 import util, { type InspectOptions } from 'node:util';
+import { EncryptedValue } from './EncryptedValue';
 import { SecureString } from './SecureString';
-import { BaseObject, type InspectFunction } from './types';
+import { ISecureURL } from './interfaces';
+import type { InspectFunction } from './types';
 
 type UrlObject = {
   href: string;
@@ -8,24 +10,21 @@ type UrlObject = {
   searchParams?: Record<string, string>;
 };
 
-/**
- * SecureURL obfuscates the password from the URL.
- */
-export class SecureURL extends BaseObject {
-  readonly #value: URL;
+export class SecureURL extends ISecureURL {
+  readonly #encryptedValue: EncryptedValue;
   readonly #password: SecureString | null;
 
   public get secretValue(): URL {
-    return this.#value;
+    return new URL(this.#encryptedValue.getValue());
   }
 
   private constructor(value: URL, secret: string | undefined) {
     super();
-    this.#value = value;
+    this.#encryptedValue = new EncryptedValue(value.href);
     this.#password = SecureString.from(value.password || null, secret);
   }
 
-  static factory(secret: string | undefined): (value: URL) => SecureURL {
+  static factory(secret: string | undefined): (value: URL) => ISecureURL {
     return (value: URL) => SecureURL.from(value, secret);
   }
 
@@ -40,7 +39,8 @@ export class SecureURL extends BaseObject {
   }
 
   override toString(): string {
-    const newUrl = new URL(this.#value.href);
+    const originalUrl = this.secretValue;
+    const newUrl = new URL(originalUrl.href);
     if (this.#password !== null) {
       newUrl.password = this.#password.toString();
     }
@@ -48,7 +48,8 @@ export class SecureURL extends BaseObject {
   }
 
   override toJSON(): UrlObject {
-    const newUrl = new URL(this.#value.href);
+    const originalUrl = this.secretValue;
+    const newUrl = new URL(originalUrl.href);
     newUrl.password = '';
 
     const searchParams = new URLSearchParams(newUrl.searchParams);

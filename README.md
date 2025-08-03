@@ -22,11 +22,13 @@ pnpm add @shellicar/core-config
 ```
 
 ```ts
-import { SecureString, SecureConnectionString, SecureURL } from '@shellicar/core-config';
+import { createFactory } from '@shellicar/core-config';
 
-console.log(SecureString.from('myPassword123'));
-console.log(SecureConnectionString.from('Server=myserver.uri;Password=myPassword123'));
-console.log(SecureURL.from(new URL('http://myuser:myPassword123@myserver.uri')));
+const factory = createFactory();
+
+console.log(factory.string('myPassword123'));
+console.log(factory.connectionString('Server=myserver.uri;Password=myPassword123'));
+console.log(factory.url(new URL('http://myuser:myPassword123@myserver.uri')));
 ```
 
 <!-- BEGIN_ECOSYSTEM -->
@@ -70,9 +72,10 @@ See [readme examples](./examples/readme/src) for example source code.
 - Handle strings.
 
 ```typescript
-import { SecureString } from '@shellicar/core-config';
+import { createFactory } from '@shellicar/core-config';
 
-const secret = SecureString.from('myPassword123');
+const factory = createFactory();
+const secret = factory.string('myPassword123');
 
 console.log(secret.toString()); 
 // sha256:71d4ec024886c1c8e4707fb02b46fd568df44e77dd5055cadc3451747f0f2716
@@ -84,14 +87,15 @@ console.log(JSON.stringify({ secret }));
 - Handle connection strings (`Key=Value[;Key=Value...]`).
 
 ```typescript
-import { SecureConnectionString } from '@shellicar/core-config';
+import { createFactory } from '@shellicar/core-config';
 
-const conn = SecureConnectionString.from('Server=myserver;Password=myPassword123');
+const factory = createFactory();
+const conn = factory.connectionString('Server=myserver;Password=myPassword123');
 console.log(conn.toString());
 // Server=myserver;Password=sha256:71d4ec024886c1c8e4707fb02b46fd568df44e77dd5055cadc3451747f0f2716
 
 // Custom secret keys
-console.log(SecureConnectionString.from('Server=myserver;SuperSecretKey=myPassword123', 'SuperSecretKey'));
+console.log(factory.connectionString('Server=myserver;SuperSecretKey=myPassword123', ['SuperSecretKey']));
 // {
 //   Server: 'myserver',
 //   SuperSecretKey: 'sha256:71d4ec024886c1c8e4707fb02b46fd568df44e77dd5055cadc3451747f0f2716'
@@ -101,10 +105,11 @@ console.log(SecureConnectionString.from('Server=myserver;SuperSecretKey=myPasswo
 - Handle URLs with passwords.information:
 
 ```typescript
-import { SecureURL } from '@shellicar/core-config';
+import { createFactory } from '@shellicar/core-config';
 
+const factory = createFactory();
 const url = new URL('https://user:myPassword123@example.com?key=value');
-const secureUrl = SecureURL.from(url);
+const secureUrl = factory.url(url);
 
 console.log(secureUrl.toString());
 // https://user:sha256%3A71d4ec024886c1c8e4707fb02b46fd568df44e77dd5055cadc3451747f0f2716@example.com/?key=value
@@ -120,9 +125,10 @@ console.log(secureUrl);
 - Use HMAC.
 
 ```ts
-import { SecureString } from '@shellicar/core-config';
+import { createFactory } from '@shellicar/core-config';
 
-const secret = SecureString.from('myPassword123', 'mySecret');
+const factory = createFactory('mySecret');
+const secret = factory.string('myPassword123');
 
 console.log(secret.toString()); 
 // sha256:71d4ec024886c1c8e4707fb02b46fd568df44e77dd5055cadc3451747f0f2716
@@ -145,17 +151,19 @@ Using with Zod for environment variable validation:
 
 ```typescript
 import { z } from 'zod';
-import { SecureString, SecureURL, SecureConnectionString } from '@shellicar/core-config';
+import { createFactory } from '@shellicar/core-config';
+
+const factory = createFactory();
 
 const envSchema = z.object({
   // MongoDB connection string with username/password
-  MONGODB_URL: z.string().url().transform((x) => SecureURL.from(new URL(x))),
+  MONGODB_URL: z.string().url().transform((x) => factory.url(new URL(x))),
   
   // API key for external service
-  API_KEY: z.string().min(1).transform((x) => SecureString.from(x)),
+  API_KEY: z.string().min(1).transform((x) => factory.string(x)),
   
   // SQL Server connection string
-  SQL_CONNECTION: z.string().transform((x) => SecureConnectionString.from(x)),
+  SQL_CONNECTION: z.string().transform((x) => factory.connectionString(x)),
 });
 
 // Parse environment variables

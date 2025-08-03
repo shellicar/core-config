@@ -1,7 +1,7 @@
 {
   "name": "@shellicar/core-config",
   "private": false,
-  "version": "1.0.1",
+  "version": "2.0.0",
   "type": "module",
   "license": "MIT",
   "author": "Stephen Hellicar",
@@ -26,7 +26,7 @@
   },
   "main": "dist/index.cjs",
   "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/index.d.cts",
   "typesVersions": {
     "*": {
       "*": ["./dist/*", "./*"]

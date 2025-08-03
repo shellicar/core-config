@@ -16,11 +16,13 @@ pnpm add @shellicar/core-config
 ```
 
 ```ts
-import { SecureString, SecureConnectionString, SecureURL } from '@shellicar/core-config';
+import { createFactory } from '@shellicar/core-config';
 
-console.log(SecureString.from('myPassword123'));
-console.log(SecureConnectionString.from('Server=myserver.uri;Password=myPassword123'));
-console.log(SecureURL.from(new URL('http://myuser:myPassword123@myserver.uri')));
+const factory = createFactory();
+
+console.log(factory.string('myPassword123'));
+console.log(factory.connectionString('Server=myserver.uri;Password=myPassword123'));
+console.log(factory.url(new URL('http://myuser:myPassword123@myserver.uri')));
 ```
 
 ## Documentation

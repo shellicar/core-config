@@ -1,9 +1,9 @@
 import { SecureConnectionString } from './SecureConnectionString';
 import { SecureString } from './SecureString';
 import { SecureURL } from './SecureURL';
-import type { SecureFactory } from './types';
+import type { ISecureFactory } from './interfaces';
 
-export const createFactory = (secret?: string): SecureFactory => {
+export const createFactory = (secret?: string): ISecureFactory => {
   return {
     string: SecureString.factory(secret),
     connectionString: SecureConnectionString.factory(secret),

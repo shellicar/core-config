@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.0] - 2025-08-03
+
+### ⚠️ BREAKING CHANGES
+
+- Exports now use abstract interfaces instead of concrete classes for better type safety
+- `SecureString`, `SecureConnectionString`, and `SecureURL` classes are no longer exported - use `createFactory()` instead
+
+### Security
+
+- Replaced plain text memory storage with AES-256-GCM encryption for all secret values
+- Added `EncryptedValue` class for secure in-memory storage with unique per-instance encryption keys
+
+### Refactoring
+
+- Extracted proper abstract interfaces for better type safety and extensibility
+- Moved type definitions to dedicated interfaces file for better organization
+
 ## [1.0.1] - 2025-01-08
 
 ## Updated
@@ -34,6 +51,7 @@
 
 Initial release.
 
+[2.0.0]: https://github.com/shellicar/core-config/releases/tag/2.0.0
 [1.0.1]: https://github.com/shellicar/core-config/releases/tag/1.0.1
 [1.0.0]: https://github.com/shellicar/core-config/releases/tag/1.0.0
 [0.1.0]: https://github.com/shellicar/core-config/releases/tag/0.1.0
