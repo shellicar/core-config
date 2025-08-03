@@ -1,8 +1,7 @@
 import util, { type InspectOptions } from 'node:util';
-import { EncryptedValue } from './EncryptedValue';
 import { SecureString } from './SecureString';
 import { ISecureURL } from './interfaces';
-import type { InspectFunction, SecureConfig } from './types';
+import type { IEncryptedValue, InspectFunction, SecureConfig } from './types';
 
 type UrlObject = {
   href: string;
@@ -11,7 +10,7 @@ type UrlObject = {
 };
 
 export class SecureURL extends ISecureURL {
-  readonly #encryptedValue: EncryptedValue;
+  readonly #encryptedValue: IEncryptedValue;
   readonly #password: SecureString | null;
 
   public get secretValue(): URL {
@@ -20,7 +19,7 @@ export class SecureURL extends ISecureURL {
 
   private constructor(value: URL, config: SecureConfig) {
     super();
-    this.#encryptedValue = new EncryptedValue(value.href);
+    this.#encryptedValue = config.encryptionProvider.encrypt(value.href);
     this.#password = SecureString.from(value.password || null, config);
   }
 
