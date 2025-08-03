@@ -1,35 +1,34 @@
 import util, { type InspectOptions } from 'node:util';
-import { EncryptedValue } from './EncryptedValue';
 import { hash } from './hash';
 import { ISecureString } from './interfaces';
-import type { InspectFunction } from './types';
+import type { InspectFunction, SecureConfig } from './types';
 
 export class SecureString extends ISecureString {
-  readonly #encryptedValue: EncryptedValue;
+  readonly #encryptedValue: import('./types').IEncryptedValue;
   readonly #hash: string;
 
   public get secretValue(): string {
     return this.#encryptedValue.getValue();
   }
 
-  private constructor(value: string, secret?: string) {
+  private constructor(value: string, config: SecureConfig) {
     super();
-    this.#encryptedValue = new EncryptedValue(value);
-    this.#hash = hash(value, secret);
+    this.#encryptedValue = config.encryptionProvider.encrypt(value);
+    this.#hash = hash(value, config.secret);
   }
 
-  static factory(secret: string | undefined): (value: string) => SecureString {
-    return (value: string) => SecureString.from(value, secret);
+  static factory(config: SecureConfig): (value: string) => SecureString {
+    return (value: string) => SecureString.from(value, config);
   }
 
-  public static from<T extends string | null | undefined>(value: T, secret?: string): T extends string ? SecureString : T {
+  public static from<T extends string | null | undefined>(value: T, config: SecureConfig): T extends string ? SecureString : T {
     if (value === null) {
       return null as T extends string ? SecureString : T;
     }
     if (value === undefined) {
       return undefined as T extends string ? SecureString : T;
     }
-    return new SecureString(value, secret) as T extends string ? SecureString : T;
+    return new SecureString(value, config) as T extends string ? SecureString : T;
   }
 
   public override toString() {

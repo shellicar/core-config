@@ -127,7 +127,7 @@ console.log(secureUrl);
 ```ts
 import { createFactory } from '@shellicar/core-config';
 
-const factory = createFactory('mySecret');
+const factory = createFactory({ secret: 'mySecret' });
 const secret = factory.string('myPassword123');
 
 console.log(secret.toString()); 

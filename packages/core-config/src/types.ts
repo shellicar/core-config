@@ -9,3 +9,19 @@ export abstract class BaseObject {
 }
 
 export type SecureKeys = readonly string[];
+
+export interface IEncryptedValue {
+  getValue(): string;
+  toString(): string;
+  toJSON(): object;
+}
+
+export interface IEncryptionProvider {
+  encrypt(value: string): IEncryptedValue;
+}
+
+export interface SecureConfig {
+  secret: string | null;
+  encryptionProvider: IEncryptionProvider;
+  secretKeys: SecureKeys;
+}

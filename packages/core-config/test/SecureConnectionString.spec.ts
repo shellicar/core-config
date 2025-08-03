@@ -1,13 +1,22 @@
 import { inspect } from 'node:util';
 import { describe, expect, it } from 'vitest';
+import { defaultSecureKeys } from '../src';
 import { SecureConnectionString } from '../src/SecureConnectionString';
+import { defaultEncryptionProvider } from '../src/createFactory';
+import type { SecureConfig } from '../src/types';
 
 describe('SecureConnectionString', () => {
+  const defaultConfig: SecureConfig = {
+    encryptionProvider: defaultEncryptionProvider,
+    secretKeys: defaultSecureKeys,
+    secret: null,
+  };
+
   it('toString hashes the secret', () => {
     const connectionString = 'A=B;C=D;SharedAccessKey=F';
     const expected = 'A=B;C=D;SharedAccessKey=sha256:f67ab10ad4e4c53121b6a5fe4da9c10ddee905b978d3788d2723d7bfacbe28a9';
 
-    const secureConnectionString = SecureConnectionString.from(connectionString);
+    const secureConnectionString = SecureConnectionString.from(connectionString, defaultConfig);
 
     const actual = secureConnectionString.toString();
 
@@ -22,7 +31,7 @@ describe('SecureConnectionString', () => {
       SharedAccessKey: 'sha256:f67ab10ad4e4c53121b6a5fe4da9c10ddee905b978d3788d2723d7bfacbe28a9',
     });
 
-    const secureConnectionString = SecureConnectionString.from(connectionString);
+    const secureConnectionString = SecureConnectionString.from(connectionString, defaultConfig);
 
     const actual = JSON.stringify(secureConnectionString);
 
@@ -37,7 +46,7 @@ describe('SecureConnectionString', () => {
       SharedAccessKey: 'sha256:f67ab10ad4e4c53121b6a5fe4da9c10ddee905b978d3788d2723d7bfacbe28a9',
     });
 
-    const secureConnectionString = SecureConnectionString.from(connectionString);
+    const secureConnectionString = SecureConnectionString.from(connectionString, defaultConfig);
 
     const actual = inspect(secureConnectionString);
 
@@ -48,7 +57,7 @@ describe('SecureConnectionString', () => {
     const connectionString = 'A=B;C=D;SharedAccessKey=F';
     const expected = 'A=B;C=D;SharedAccessKey=F';
 
-    const secureConnectionString = SecureConnectionString.from(connectionString);
+    const secureConnectionString = SecureConnectionString.from(connectionString, defaultConfig);
 
     const actual = secureConnectionString.secretValue;
 
@@ -59,7 +68,10 @@ describe('SecureConnectionString', () => {
     const connectionString = 'A=B;C=D;MySecretKey=F';
     const expected = 'A=B;C=D;MySecretKey=sha256:f67ab10ad4e4c53121b6a5fe4da9c10ddee905b978d3788d2723d7bfacbe28a9';
 
-    const secureConnectionString = SecureConnectionString.from(connectionString, ['MySecretKey']);
+    const secureConnectionString = SecureConnectionString.from(connectionString, {
+      ...defaultConfig,
+      secretKeys: ['MySecretKey'],
+    });
 
     const actual = secureConnectionString.toString();
 
@@ -70,7 +82,7 @@ describe('SecureConnectionString', () => {
     const connectionString = 'A=B;C=D;SHAREDACCESSKEY=F';
     const expected = 'A=B;C=D;SHAREDACCESSKEY=sha256:f67ab10ad4e4c53121b6a5fe4da9c10ddee905b978d3788d2723d7bfacbe28a9';
 
-    const secureConnectionString = SecureConnectionString.from(connectionString);
+    const secureConnectionString = SecureConnectionString.from(connectionString, defaultConfig);
 
     const actual = secureConnectionString.toString();
 
@@ -80,7 +92,10 @@ describe('SecureConnectionString', () => {
   it('can use secret key', () => {
     const connectionString = 'A=B;C=D;SharedAccessKey=password';
     const expected = 'A=B;C=D;SharedAccessKey=hs256:7055faebf30a41341bb8d043f6a3a6a18f051f6b30ce6c7b16f7276fe4fdaae7';
-    const secureConnectionString = SecureConnectionString.from(connectionString, undefined, 'hello');
+    const secureConnectionString = SecureConnectionString.from(connectionString, {
+      ...defaultConfig,
+      secret: 'hello',
+    });
 
     const actual = secureConnectionString.toString();
     expect(actual).toBe(expected);

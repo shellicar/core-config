@@ -2,7 +2,7 @@ import util, { type InspectOptions } from 'node:util';
 import { EncryptedValue } from './EncryptedValue';
 import { SecureString } from './SecureString';
 import { ISecureURL } from './interfaces';
-import type { InspectFunction } from './types';
+import type { InspectFunction, SecureConfig } from './types';
 
 type UrlObject = {
   href: string;
@@ -18,24 +18,24 @@ export class SecureURL extends ISecureURL {
     return new URL(this.#encryptedValue.getValue());
   }
 
-  private constructor(value: URL, secret: string | undefined) {
+  private constructor(value: URL, config: SecureConfig) {
     super();
     this.#encryptedValue = new EncryptedValue(value.href);
-    this.#password = SecureString.from(value.password || null, secret);
+    this.#password = SecureString.from(value.password || null, config);
   }
 
-  static factory(secret: string | undefined): (value: URL) => ISecureURL {
-    return (value: URL) => SecureURL.from(value, secret);
+  static factory(config: SecureConfig): (value: URL) => ISecureURL {
+    return (value: URL) => SecureURL.from(value, config);
   }
 
-  public static from<T extends URL | null | undefined>(value: T, secret?: string): T extends URL ? SecureURL : T {
+  public static from<T extends URL | null | undefined>(value: T, config: SecureConfig): T extends URL ? SecureURL : T {
     if (value === null) {
       return null as T extends URL ? SecureURL : T;
     }
     if (value === undefined) {
       return undefined as T extends URL ? SecureURL : T;
     }
-    return new SecureURL(value, secret) as T extends URL ? SecureURL : T;
+    return new SecureURL(value, config) as T extends URL ? SecureURL : T;
   }
 
   override toString(): string {
