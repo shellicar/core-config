@@ -1,9 +1,9 @@
+import { defaultSecureKeys } from './defaults';
 import { EncryptedValue } from './EncryptedValue';
+import type { ISecureFactory } from './interfaces';
 import { SecureConnectionString } from './SecureConnectionString';
 import { SecureString } from './SecureString';
 import { SecureURL } from './SecureURL';
-import { defaultSecureKeys } from './defaults';
-import type { ISecureFactory } from './interfaces';
 import type { IEncryptionProvider, SecureConfig } from './types';
 
 export const defaultEncryptionProvider: IEncryptionProvider = {

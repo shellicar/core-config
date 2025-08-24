@@ -39,10 +39,15 @@ console.log(factory.url(new URL('http://myuser:myPassword123@myserver.uri')));
 
 - [`@shellicar/core-config`](https://github.com/shellicar/core-config) - A library for securely handling sensitive configuration values like connection strings, URLs, and secrets.
 - [`@shellicar/core-di`](https://github.com/shellicar/core-di) - A basic dependency injection library.
-- [`@shellicar/core-foundation`](https://github.com/shellicar/core-foundation) - A comprehensive starter repository.
+
+### Reference Architectures
+
+- [`@shellicar/reference-foundation`](https://github.com/shellicar/reference-foundation) - A comprehensive starter repository. Illustrates individual concepts.
+- [`@shellicar/reference-enterprise`](https://github.com/shellicar/reference-enterprise) - A comprehensive starter repository. Can be used as the basis for creating a new Azure application workload.
 
 ### Build Tools
 
+- [`@shellicar/build-clean`](https://github.com/shellicar/build-clean) - Build plugin that automatically cleans unused files from output directories.
 - [`@shellicar/build-version`](https://github.com/shellicar/build-version) - Build plugin that calculates and exposes version information through a virtual module import.
 - [`@shellicar/build-graphql`](https://github.com/shellicar/build-graphql) - Build plugin that loads GraphQL files and makes them available through a virtual module import.
 
@@ -150,28 +155,32 @@ All secure types implement proper toString(), toJSON(), and inspect() methods to
 Using with Zod for environment variable validation:
 
 ```typescript
-import { z } from 'zod';
+import { env } from 'node:process';
 import { createFactory } from '@shellicar/core-config';
+import { z } from 'zod';
 
 const factory = createFactory();
 
 const envSchema = z.object({
   // MongoDB connection string with username/password
-  MONGODB_URL: z.string().url().transform((x) => factory.url(new URL(x))),
-  
+  MONGODB_URL: z.url().transform((x) => factory.url(new URL(x))),
+
   // API key for external service
-  API_KEY: z.string().min(1).transform((x) => factory.string(x)),
-  
+  API_KEY: z
+    .string()
+    .min(1)
+    .transform((x) => factory.string(x)),
+
   // SQL Server connection string
   SQL_CONNECTION: z.string().transform((x) => factory.connectionString(x)),
 });
 
 // Parse environment variables
-const config = envSchema.parse(process.env);
+const config = envSchema.parse(env);
 
 // Values are now strongly typed and secured
 console.log(config.MONGODB_URL.toString());
-// https://myuser:sha256%3A...@mongodb.example.com/
+// mongodb://myuser:sha256%3A...@mongodb.example.com/
 
 console.log(config.API_KEY.toString());
 // sha256:...

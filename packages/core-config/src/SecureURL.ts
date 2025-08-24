@@ -1,6 +1,6 @@
 import util, { type InspectOptions } from 'node:util';
-import { SecureString } from './SecureString';
 import { ISecureURL } from './interfaces';
+import { SecureString } from './SecureString';
 import type { IEncryptedValue, InspectFunction, SecureConfig } from './types';
 
 type UrlObject = {

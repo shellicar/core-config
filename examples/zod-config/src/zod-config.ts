@@ -1,20 +1,16 @@
+import { env } from 'node:process';
 import { createFactory } from '@shellicar/core-config';
 import { z } from 'zod';
 
 const factory = createFactory();
 
-const env = {
-  MONGODB_URL: 'mongodb://user:myPassword123@localhost:27017/?authSource=admin',
-  API_KEY: 'myPassword123',
-  SQL_CONNECTION: 'Server=myserver;Database=mydb;User Id=admin;Password=myPassword123',
-};
+env.MONGODB_URL = 'mongodb://user:myPassword123@localhost:27017/?authSource=admin';
+env.API_KEY = 'myPassword123';
+env.SQL_CONNECTION = 'Server=myserver;Database=mydb;User Id=admin;Password=myPassword123';
 
 const envSchema = z.object({
   // MongoDB connection string with username/password
-  MONGODB_URL: z
-    .string()
-    .url()
-    .transform((x) => factory.url(new URL(x))),
+  MONGODB_URL: z.url().transform((x) => factory.url(new URL(x))),
 
   // API key for external service
   API_KEY: z
@@ -31,7 +27,7 @@ const config = envSchema.parse(env);
 
 // Values are now strongly typed and secured
 console.log(config.MONGODB_URL.toString());
-// https://myuser:sha256%3A...@mongodb.example.com/
+// mongodb://myuser:sha256%3A...@mongodb.example.com/
 
 console.log(config.API_KEY.toString());
 // sha256:...
