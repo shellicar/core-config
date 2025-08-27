@@ -16,6 +16,7 @@
     "@shellicar/build-clean": "1.0.0-preview.5",
     "@tsconfig/node20": "^20.1.6",
     "@types/node": "^24.3.0",
+    "terser": "^5.43.1",
     "tsup": "^8.5.0",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"

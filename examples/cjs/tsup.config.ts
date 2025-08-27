@@ -9,7 +9,7 @@ export default defineConfig((config) => ({
   esbuildPlugins: [cleanPlugin({ destructive: true })],
   format: ['cjs'],
   keepNames: true,
-  minify: false,
+  minify: config.watch ? false : 'terser',
   outDir: 'dist',
   sourcemap: false,
   splitting: true,
