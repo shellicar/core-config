@@ -1,12 +1,20 @@
 {
   "name": "@shellicar/core-config",
   "private": false,
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "license": "MIT",
   "author": "Stephen Hellicar",
   "description": "A library for securely handling sensitive configuration values like connection strings, URLs, and secrets.",
-  "keywords": ["secure", "connection", "string", "connection string", "config", "secret", "URL"],
+  "keywords": [
+    "secure",
+    "connection",
+    "string",
+    "connection string",
+    "config",
+    "secret",
+    "URL"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shellicar/core-config.git"
@@ -20,19 +28,30 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.cts",
+        "default": "./dist/cjs/index.cjs"
+      }
     }
   },
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.cts",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
   "typesVersions": {
     "*": {
-      "*": ["./dist/*", "./*"]
+      "index": [
+        "./dist/esm/index.d.ts"
+      ]
     }
   },
-  "files": ["dist", "*.md"],
+  "files": [
+    "dist",
+    "*.md"
+  ],
   "scripts": {
     "build": "tsup-node",
     "dev": "tsup-node --watch",
@@ -40,11 +59,12 @@
     "type-check": "tsc -p tsconfig.check.json"
   },
   "devDependencies": {
-    "@tsconfig/node20": "^20.1.4",
-    "@types/node": "^22.10.5",
-    "terser": "^5.37.0",
-    "tsup": "^8.3.5",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "@shellicar/build-clean": "1.0.0-preview.5",
+    "@tsconfig/node20": "^20.1.6",
+    "@types/node": "^24.3.0",
+    "terser": "^5.43.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   }
 }

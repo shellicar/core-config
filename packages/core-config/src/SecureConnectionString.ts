@@ -1,6 +1,6 @@
 import util, { type InspectOptions } from 'node:util';
-import { SecureString } from './SecureString';
 import { ISecureConnectionString } from './interfaces';
+import { SecureString } from './SecureString';
 import type { IEncryptedValue, InspectFunction, SecureConfig, SecureKeys } from './types';
 
 export class SecureConnectionString extends ISecureConnectionString {

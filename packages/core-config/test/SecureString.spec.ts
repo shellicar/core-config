@@ -1,8 +1,8 @@
 import { inspect } from 'node:util';
 import { describe, expect, it } from 'vitest';
 import { defaultSecureKeys } from '../src';
-import { SecureString } from '../src/SecureString';
 import { defaultEncryptionProvider } from '../src/createFactory';
+import { SecureString } from '../src/SecureString';
 import type { SecureConfig } from '../src/types';
 
 describe('SecureString', () => {
