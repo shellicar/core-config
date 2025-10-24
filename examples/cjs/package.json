@@ -10,15 +10,15 @@
   },
   "dependencies": {
     "@shellicar/core-config": "workspace:^",
-    "zod": "^4.1.1"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@shellicar/build-clean": "1.0.0-preview.5",
+    "@shellicar/build-clean": "1.1.2",
     "@tsconfig/node20": "^20.1.6",
-    "@types/node": "^24.3.0",
-    "terser": "^5.43.1",
+    "@types/node": "^24.9.1",
+    "terser": "^5.44.0",
     "tsup": "^8.5.0",
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }
