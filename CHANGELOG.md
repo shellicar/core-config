@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.2] - 2025-12-26
+
+### Changed
+
+- Updated all dependencies to latest versions
+
 ## [2.1.1] - 2025-10-24
 
 ### Changed
@@ -65,6 +71,7 @@
 
 Initial release.
 
+[2.1.2]: https://github.com/shellicar/core-config/releases/tag/2.1.2
 [2.1.1]: https://github.com/shellicar/core-config/releases/tag/2.1.1
 [2.1.0]: https://github.com/shellicar/core-config/releases/tag/2.1.0
 [2.0.0]: https://github.com/shellicar/core-config/releases/tag/2.0.0
