@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.3] - 2026-01-20
+
+### Fixed
+
+- Export factory interface returned by `createFactory`;
+
 ## [2.1.2] - 2025-12-26
 
 ### Changed
@@ -71,6 +77,7 @@
 
 Initial release.
 
+[2.1.3]: https://github.com/shellicar/core-config/releases/tag/2.1.3
 [2.1.2]: https://github.com/shellicar/core-config/releases/tag/2.1.2
 [2.1.1]: https://github.com/shellicar/core-config/releases/tag/2.1.1
 [2.1.0]: https://github.com/shellicar/core-config/releases/tag/2.1.0
