@@ -1,10 +1,13 @@
 import { createFactory } from './createFactory';
 import { defaultSecureKeys } from './defaults';
-import { EncryptedValue } from './EncryptedValue';
+import { KeyVaultReferencePolicy } from './enums';
+import { UnresolvedKeyVaultReferenceError } from './errors/UnresolvedKeyVaultReferenceError';
 import { ISecureConnectionString, ISecureFactory, ISecureString, ISecureURL } from './interfaces';
-import type { SecureConfig } from './types';
+import type { IEncryptedValue, ILogger, Options } from './types';
 
-export { ISecureConnectionString, ISecureString, ISecureURL, EncryptedValue, ISecureFactory };
 export { createFactory };
 export { defaultSecureKeys };
-export type { SecureConfig };
+export { ISecureConnectionString, ISecureFactory, ISecureString, ISecureURL };
+export { KeyVaultReferencePolicy };
+export { UnresolvedKeyVaultReferenceError };
+export type { IEncryptedValue, ILogger, Options };

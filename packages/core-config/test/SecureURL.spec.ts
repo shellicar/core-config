@@ -1,22 +1,19 @@
 import { inspect } from 'node:util';
 import { describe, expect, it } from 'vitest';
-import { defaultSecureKeys } from '../src';
-import { defaultEncryptionProvider } from '../src/createFactory';
-import { SecureURL } from '../src/SecureURL';
-import type { SecureConfig } from '../src/types';
+import { resolveOptions } from '../src/core/resolveOptions';
+import { SecureURL } from '../src/core/SecureURL';
+import { KeyVaultReferencePolicy } from '../src/enums';
 
 describe('SecureURL', () => {
-  const defaultConfig: SecureConfig = {
-    encryptionProvider: defaultEncryptionProvider,
-    secretKeys: defaultSecureKeys,
-    secret: null,
-  };
+  const defaultOptions = resolveOptions({
+    keyVaultReferencePolicy: KeyVaultReferencePolicy.Ignore,
+  });
 
   it('toString hides the secret', () => {
     const url = new URL('https://user:password@localhost:8080/');
     const expected = 'https://user:sha256%3A5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8@localhost:8080/';
 
-    const secureUrl = SecureURL.from(url, defaultConfig);
+    const secureUrl = SecureURL.from(url, defaultOptions);
 
     const actual = secureUrl.toString();
 
@@ -30,7 +27,7 @@ describe('SecureURL', () => {
       password: 'sha256:5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
     });
 
-    const secureUrl = SecureURL.from(url, defaultConfig);
+    const secureUrl = SecureURL.from(url, defaultOptions);
 
     const actual = JSON.stringify(secureUrl);
 
@@ -41,7 +38,7 @@ describe('SecureURL', () => {
     const url = new URL('https://localhost:8080/');
     const expected = 'https://localhost:8080/';
 
-    const secureUrl = SecureURL.from(url, defaultConfig);
+    const secureUrl = SecureURL.from(url, defaultOptions);
 
     const actual = secureUrl.toString();
     expect(actual).toBe(expected);
@@ -53,7 +50,7 @@ describe('SecureURL', () => {
       href: 'https://localhost:8080/',
     });
 
-    const secureUrl = SecureURL.from(url, defaultConfig);
+    const secureUrl = SecureURL.from(url, defaultOptions);
 
     const actual = JSON.stringify(secureUrl);
     expect(actual).toBe(expected);
@@ -70,7 +67,7 @@ describe('SecureURL', () => {
       },
     });
 
-    const secureUrl = SecureURL.from(url, defaultConfig);
+    const secureUrl = SecureURL.from(url, defaultOptions);
     const actual = JSON.stringify(secureUrl);
 
     expect(actual).toBe(expected);
@@ -83,7 +80,7 @@ describe('SecureURL', () => {
       password: 'sha256:5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
     });
 
-    const secureUrl = SecureURL.from(url, defaultConfig);
+    const secureUrl = SecureURL.from(url, defaultOptions);
 
     const actual = inspect(secureUrl);
 
@@ -94,7 +91,7 @@ describe('SecureURL', () => {
     const url = new URL('https://user:password@localhost:8080/');
     const expected = new URL('https://user:password@localhost:8080/');
 
-    const secureUrl = SecureURL.from(url, defaultConfig);
+    const secureUrl = SecureURL.from(url, defaultOptions);
 
     const actual = secureUrl.secretValue;
 
@@ -105,13 +102,13 @@ describe('SecureURL', () => {
     const url = new URL('https://user:password@localhost:8080/');
     const expected = 'https://user:hs256%3A7055faebf30a41341bb8d043f6a3a6a18f051f6b30ce6c7b16f7276fe4fdaae7@localhost:8080/';
 
-    const secureUrl = SecureURL.from(url, {
-      ...defaultConfig,
+    const options = resolveOptions({
+      keyVaultReferencePolicy: KeyVaultReferencePolicy.Ignore,
       secret: 'hello',
     });
+    const secureUrl = SecureURL.from(url, options);
 
     const actual = secureUrl.toString();
-    console.log('actual', actual);
 
     expect(actual).toBe(expected);
   });
@@ -124,10 +121,11 @@ describe('SecureURL', () => {
       password: 'hs256:7055faebf30a41341bb8d043f6a3a6a18f051f6b30ce6c7b16f7276fe4fdaae7',
     });
 
-    const secureUrl = SecureURL.from(url, {
-      ...defaultConfig,
+    const options = resolveOptions({
+      keyVaultReferencePolicy: KeyVaultReferencePolicy.Ignore,
       secret: 'hello',
     });
+    const secureUrl = SecureURL.from(url, options);
 
     const actual = JSON.stringify(secureUrl);
 

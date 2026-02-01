@@ -1,7 +1,9 @@
 import util, { type InspectOptions } from 'node:util';
-import { ISecureURL } from './interfaces';
+import { ISecureURL } from '../interfaces';
+import type { IEncryptedValue, InspectFunction } from '../types';
+import { validateKeyVaultReference } from './keyVaultDetection';
 import { SecureString } from './SecureString';
-import type { IEncryptedValue, InspectFunction, SecureConfig } from './types';
+import type { ResolvedOptions } from './types';
 
 type UrlObject = {
   href: string;
@@ -17,24 +19,26 @@ export class SecureURL extends ISecureURL {
     return new URL(this.#encryptedValue.getValue());
   }
 
-  private constructor(value: URL, config: SecureConfig) {
+  private constructor(value: URL, options: ResolvedOptions) {
     super();
-    this.#encryptedValue = config.encryptionProvider.encrypt(value.href);
-    this.#password = SecureString.from(value.password || null, config);
+    validateKeyVaultReference(value.href, options);
+    this.#encryptedValue = options.encryptionProvider.encrypt(value.href);
+    const decodedPassword = value.password ? decodeURIComponent(value.password) : null;
+    this.#password = SecureString.from(decodedPassword, options);
   }
 
-  static factory(config: SecureConfig): (value: URL) => ISecureURL {
-    return (value: URL) => SecureURL.from(value, config);
+  static factory(options: ResolvedOptions): (value: URL) => ISecureURL {
+    return (value: URL) => SecureURL.from(value, options);
   }
 
-  public static from<T extends URL | null | undefined>(value: T, config: SecureConfig): T extends URL ? SecureURL : T {
+  public static from<T extends URL | null | undefined>(value: T, options: ResolvedOptions): T extends URL ? SecureURL : T {
     if (value === null) {
       return null as T extends URL ? SecureURL : T;
     }
     if (value === undefined) {
       return undefined as T extends URL ? SecureURL : T;
     }
-    return new SecureURL(value, config) as T extends URL ? SecureURL : T;
+    return new SecureURL(value, options) as T extends URL ? SecureURL : T;
   }
 
   override toString(): string {
@@ -70,12 +74,12 @@ export class SecureURL extends ISecureURL {
     }
     return result;
   }
-  override [util.inspect.custom](depth: number, options: InspectOptions, inspect: InspectFunction): string {
+  override [util.inspect.custom](depth: number, inspectOptions: InspectOptions, inspect: InspectFunction): string {
     if (depth < 0) {
       return '[SecureURL]';
     }
-    const newOptions = Object.assign({}, options, {
-      depth: options.depth == null ? null : options.depth - 1,
+    const newOptions = Object.assign({}, inspectOptions, {
+      depth: inspectOptions.depth == null ? null : inspectOptions.depth - 1,
     });
     return inspect(this.toJSON(), newOptions);
   }

@@ -1,12 +1,13 @@
 import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
+import type { IEncryptedValue } from '../types';
 
-export class EncryptedValue {
+export class EncryptedValue implements IEncryptedValue {
   private readonly encryptedData: Buffer;
   private readonly iv: Buffer;
   private readonly authTag: Buffer;
   private readonly key: Buffer;
 
-  public constructor(value: string) {
+  private constructor(value: string) {
     this.key = randomBytes(32);
     this.iv = randomBytes(16);
 
@@ -18,6 +19,10 @@ export class EncryptedValue {
 
     this.encryptedData = Buffer.concat(encryptedChunks);
     this.authTag = cipher.getAuthTag();
+  }
+
+  public static from(value: string) {
+    return new EncryptedValue(value);
   }
 
   public getValue(): string {

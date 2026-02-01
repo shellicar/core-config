@@ -1,58 +1,51 @@
 import { describe, expect, it } from 'vitest';
-import { EncryptedValue } from '../src/EncryptedValue';
+import { EncryptedValue } from '../src/core/EncryptedValue';
 
 describe('EncryptedValue', () => {
   it('encrypts and decrypts values correctly', () => {
-    const originalValue = 'my-secret-password';
+    const expected = 'my-secret-password';
 
-    const encrypted = new EncryptedValue(originalValue);
-    const decryptedValue = encrypted.getValue();
+    const encrypted = EncryptedValue.from(expected);
+    const actual = encrypted.getValue();
 
-    expect(decryptedValue).toBe(originalValue);
+    expect(actual).toBe(expected);
   });
 
-  it('generates unique encryption for each instance', () => {
-    const value = 'same-secret';
-
-    const encrypted1 = new EncryptedValue(value);
-    const encrypted2 = new EncryptedValue(value);
-
-    expect(encrypted1.getValue()).toBe(value);
-    expect(encrypted2.getValue()).toBe(value);
-    expect(encrypted1.toString()).toBe(encrypted2.toString());
-  });
-
-  it('does not reveal encrypted data in toString', () => {
+  it('returns expected toString', () => {
     const secret = 'super-secret-password';
-    const encrypted = new EncryptedValue(secret);
+    const expected = '[EncryptedValue]';
 
-    const stringRepresentation = encrypted.toString();
+    const encrypted = EncryptedValue.from(secret);
+    const actual = encrypted.toString();
 
-    expect(stringRepresentation).toBe('[EncryptedValue]');
-    expect(stringRepresentation).not.toContain(secret);
+    expect(actual).toBe(expected);
   });
 
-  it('does not reveal encrypted data in JSON serialization', () => {
+  it('returns expected JSON object', () => {
     const secret = 'another-secret';
-    const encrypted = new EncryptedValue(secret);
+    const expected = { type: 'EncryptedValue', encrypted: true };
 
-    const jsonObject = encrypted.toJSON();
-    const jsonString = JSON.stringify(encrypted);
+    const encrypted = EncryptedValue.from(secret);
+    const actual = encrypted.toJSON();
 
-    expect(jsonObject).toEqual({ type: 'EncryptedValue', encrypted: true });
-    expect(jsonString).not.toContain(secret);
+    expect(actual).toEqual(expected);
   });
 
   it('works with empty strings', () => {
-    const encrypted = new EncryptedValue('');
+    const expected = '';
 
-    expect(encrypted.getValue()).toBe('');
+    const encrypted = EncryptedValue.from(expected);
+    const actual = encrypted.getValue();
+
+    expect(actual).toBe(expected);
   });
 
   it('works with unicode characters', () => {
-    const unicodeValue = '🔒 Secret with émojis and ñ characters 中文';
-    const encrypted = new EncryptedValue(unicodeValue);
+    const expected = '🔒 Secret with émojis and ñ characters 中文';
 
-    expect(encrypted.getValue()).toBe(unicodeValue);
+    const encrypted = EncryptedValue.from(expected);
+    const actual = encrypted.getValue();
+
+    expect(actual).toBe(expected);
   });
 });
