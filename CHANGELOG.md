@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.1.4] - 2026-02-28
+
+### Security
+
+- Fixed [CVE-2026-25547](https://github.com/advisories/GHSA-7h2j-956f-4vf2) in @isaacs/brace-expansion
+- Fixed [CVE-2026-26996](https://github.com/advisories/GHSA-3ppc-4f35-3m26) in minimatch
+
+### Changed
+
+- Updated @shellicar/build-clean to 1.2.3, biome to 2.4.4
+- Updated all dependencies to latest versions
+
 ## [2.1.3] - 2026-01-20
 
 ### Fixed
@@ -77,6 +89,7 @@
 
 Initial release.
 
+[2.1.4]: https://github.com/shellicar/core-config/releases/tag/2.1.4
 [2.1.3]: https://github.com/shellicar/core-config/releases/tag/2.1.3
 [2.1.2]: https://github.com/shellicar/core-config/releases/tag/2.1.2
 [2.1.1]: https://github.com/shellicar/core-config/releases/tag/2.1.1
